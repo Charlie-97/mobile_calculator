@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_calculator/main.dart';
 import 'package:mobile_calculator/widgets/button.dart';
+import 'package:mobile_calculator/widgets/screen_view.dart';
+import 'package:mobile_calculator/widgets/drawer.dart';
 
 
 class Standard extends StatefulWidget {
@@ -22,7 +23,7 @@ class _StandardState extends State<Standard> {
       ),
       body: Column(
         children: [
-          const ScreenView(),
+          ScreenView(),
           Container(
             color: Colors.grey[900],
             child: Column(
@@ -32,7 +33,8 @@ class _StandardState extends State<Standard> {
                     CalcButton('%'),
                     CalcButton('CE'),
                     CalcButton('C'),
-                    BackSpaceButton()
+                    CalcButton('Del')
+                    // BackSpaceButton()
                   ],
                 ),
                 Row(

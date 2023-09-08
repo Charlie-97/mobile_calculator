@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_calculator/main.dart';
+import 'package:mobile_calculator/widgets/drawer.dart';
 
 class Scientific extends StatelessWidget {
   const Scientific({super.key});
@@ -13,6 +13,16 @@ class Scientific extends StatelessWidget {
       appBar: AppBar(
         title: const Text("SCIENTIFIC"),
         backgroundColor: Colors.grey[900],
+      ),
+      body: const Center(
+        child: Text(
+          'Coming Soon!',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 55.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       // body: Column(
       //   children: [

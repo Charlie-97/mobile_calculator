@@ -1,73 +1,113 @@
 import 'dart:math';
+import 'package:mobile_calculator/utils/calc_state.dart';
 
 String initOutput = '0';
 String finalOutput = '';
-double _num1 = 0;
-double _num2 = 0;
+String expression = '';
+String answer = '';
+num _num1 = 0;
+num _num2 = 0;
 String _operator = '';
+int maxOutputLength = 7;
 
-void buttonPressed(String buttonText) {
+List<String> history = [];
+
+void buttonPressed(String buttonText, CalcState calcState) {
+  // if (initOutput.length > maxOutputLength) {
+  //   initOutput = initOutput.substring(0, maxOutputLength);
+  //   // return;
+  // }
+
   if (buttonText == 'C') {
-    finalOutput = '0';
+    finalOutput = '';
     initOutput = '0';
     _num1 = 0;
     _num2 = 0;
     _operator = '';
+    calcState.updateOutput(initOutput, finalOutput);
+  } else if (buttonText == 'Del') {
+    backSpace();
+    calcState.updateOutput(initOutput, finalOutput);
   } else if (buttonText == 'CE') {
     initOutput = '0';
+    calcState.updateOutput(initOutput, finalOutput);
   } else if (_isOperator(buttonText)) {
-    // if (_operator.isNotEmpty) {
-    //   _num2 = double.parse(initOutput);
-    //   initOutput = _performCalculation();
-    //   _num1 = double.parse(initOutput);
-    // } else {
-    //   _num1 = double.parse(initOutput);
-    // }
     if (_operator.isNotEmpty) {
-      _num2 = double.parse(initOutput);
-      _num1 = double.parse(_performCalculation());
+      _num2 = num.parse(initOutput);
+      _num1 = num.parse(_performCalculation());
+      expression = '$finalOutput  $initOutput =';
+      answer = _num1.toString();
+      _addHistory();
       _operator = buttonText;
-      initOutput = '';
+      initOutput = '0';
       finalOutput = ('$_num1 $_operator').toString();
-      
+      calcState.updateOutput(initOutput, finalOutput);
     } else {
-      _num1 = double.parse(initOutput);
+      _num1 = num.parse(initOutput);
       _operator = buttonText;
       initOutput = '0';
       finalOutput = _num1.toString();
       finalOutput += _operator;
+      calcState.updateOutput(initOutput, finalOutput);
     }
   } else if (buttonText == '%') {
-    _num1 = double.parse(initOutput);
+    _num1 = num.parse(initOutput);
     _operator = buttonText;
     finalOutput = ('$_num1 $_operator');
     initOutput = (_num1 / 100).toString();
+    _num1 = num.parse(initOutput);
+    calcState.updateOutput(initOutput, finalOutput);
+    initOutput = '';
   } else if (buttonText == '=') {
-    _num2 = double.parse(initOutput);
-    finalOutput = ('$_num1 $_operator $_num2').toString();
-    initOutput = _performCalculation();
-    if (_operator == '+') {
-      initOutput = (_num1 + _num2).toString();
-    } else if (_operator == '-') {
-      initOutput = (_num1 - _num2).toString();
-    } else if (_operator == '*') {
-      initOutput = (_num1 * _num2).toString();
-    } else if (_operator == '/') {
-      initOutput = (_num1 / _num2).toString();
+    if (finalOutput.isEmpty) {
+      _num1 = num.parse(initOutput);
+
+      if (_num1 != 0) {
+        finalOutput = ('$_num1').toString();
+      } else {
+        finalOutput = '';
+      }
+    } else {
+      _num2 = num.parse(initOutput);
+      finalOutput = ('$_num1 $_operator $_num2').toString();
+      initOutput = _performCalculation();
+      expression = '$finalOutput =';
+      answer = initOutput;
+      _addHistory();
+      calcState.updateOutput(initOutput, finalOutput);
     }
-    _num1 = 0;
-    _num2 = 0;
-    _operator = '';
+    calcState.updateOutput(initOutput, finalOutput);
+    if (_isOperator(buttonText) || buttonText == '%') {
+      _num1 = num.parse(initOutput);
+    }
+    
+    else {
+      _num1 = num.parse(initOutput);
+      initOutput = '0';
+      finalOutput = '';
+      _operator = '';
+    }
   } else if (buttonText == '.') {
     if (!initOutput.contains('.')) {
       initOutput += buttonText;
+      calcState.updateOutput(initOutput, finalOutput);
     }
   } else if (initOutput == '0') {
     initOutput = buttonText;
+    calcState.updateOutput(initOutput, finalOutput);
   } else if (initOutput != '0') {
     initOutput += buttonText;
+    calcState.updateOutput(initOutput, finalOutput);
   } else {
     throw Exception(e);
+  }
+}
+
+void backSpace() {
+  if (initOutput.length > 1) {
+    initOutput = initOutput.substring(0, initOutput.length - 1);
+  } else {
+    initOutput = '0';
   }
 }
 
@@ -95,6 +135,10 @@ String _performCalculation() {
     default:
       return _num1.toString();
   }
+}
+
+void _addHistory() {
+  history.add("$expression \n $answer");
 }
 
 void convert() {}

@@ -1,57 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_calculator/utils/calc_function.dart';
+import 'package:mobile_calculator/utils/calc_state.dart';
+import 'package:provider/provider.dart';
 
-class CalcButton extends StatefulWidget {
+class CalcButton extends StatelessWidget {
   final String buttonLabel;
   // final Future<void> Function() onPressed;
   const CalcButton(this.buttonLabel, {super.key});
 
   @override
-  State<CalcButton> createState() => _CalcButtonState();
-}
-
-class _CalcButtonState extends State<CalcButton> {
-  @override
   Widget build(BuildContext context) {
+    final calcState = Provider.of<CalcState>(context);
+
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
-          setState(() {
-            buttonPressed(widget.buttonLabel);
-          });
+          buttonPressed(buttonLabel, calcState);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.grey[900],
         ),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Text(widget.buttonLabel),
+          child: Text(buttonLabel),
         ),
       ),
     );
   }
 }
 
-class BackSpaceButton extends StatefulWidget {
+class BackSpaceButton extends StatelessWidget {
   const BackSpaceButton({super.key});
 
   @override
-  State<BackSpaceButton> createState() => _BackSpaceButtonState();
-}
-
-class _BackSpaceButtonState extends State<BackSpaceButton> {
-  @override
   Widget build(BuildContext context) {
+    
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
-          setState(() {
-            if (initOutput.length > 1) {
-              initOutput = initOutput.substring(0, initOutput.length - 1);
-            } else {
-              initOutput = '';
-            }
-          });
+          backSpace();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.grey[900],
