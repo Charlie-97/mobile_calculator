@@ -23,7 +23,7 @@ class _StandardState extends State<Standard> {
       ),
       body: Column(
         children: [
-          ScreenView(),
+          const ScreenView(),
           Container(
             color: Colors.grey[900],
             child: Column(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_calculator/utils/calc_state.dart';
-import 'package:mobile_calculator/utils/calc_function.dart';
 
 class ScreenView extends StatelessWidget {
   const ScreenView({super.key});
@@ -55,15 +54,4 @@ class ScreenView extends StatelessWidget {
   }
 }
 
-// Card historyView(int index) {
-//   return Card(
-//     color: Colors.grey[900],
-//     child: Padding(
-//       padding: const EdgeInsets.all(12.0),
-//       child: Text(
-//         history[index],
-//         style: TextStyle(color: Colors.grey[200]),
-//       ),
-//     ),
-//   );
-// }
+

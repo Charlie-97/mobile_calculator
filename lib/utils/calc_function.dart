@@ -9,15 +9,11 @@ num _num1 = 0;
 num _num2 = 0;
 String _operator = '';
 int maxOutputLength = 7;
+const int maxHistoryEntries = 15;
 
 List<String> history = [];
 
 void buttonPressed(String buttonText, CalcState calcState) {
-  // if (initOutput.length > maxOutputLength) {
-  //   initOutput = initOutput.substring(0, maxOutputLength);
-  //   // return;
-  // }
-
   if (buttonText == 'C') {
     finalOutput = '';
     initOutput = '0';
@@ -41,23 +37,23 @@ void buttonPressed(String buttonText, CalcState calcState) {
       _operator = buttonText;
       initOutput = '0';
       finalOutput = ('$_num1 $_operator').toString();
-      calcState.updateOutput(initOutput, finalOutput);
     } else {
       _num1 = num.parse(initOutput);
       _operator = buttonText;
       initOutput = '0';
       finalOutput = _num1.toString();
-      finalOutput += _operator;
-      calcState.updateOutput(initOutput, finalOutput);
+      finalOutput += ' $_operator';
     }
+    calcState.updateOutput(initOutput, finalOutput);
   } else if (buttonText == '%') {
     _num1 = num.parse(initOutput);
     _operator = buttonText;
     finalOutput = ('$_num1 $_operator');
     initOutput = (_num1 / 100).toString();
     _num1 = num.parse(initOutput);
+
     calcState.updateOutput(initOutput, finalOutput);
-    initOutput = '';
+    initOutput = '0';
   } else if (buttonText == '=') {
     if (finalOutput.isEmpty) {
       _num1 = num.parse(initOutput);
@@ -74,19 +70,19 @@ void buttonPressed(String buttonText, CalcState calcState) {
       expression = '$finalOutput =';
       answer = initOutput;
       _addHistory();
-      calcState.updateOutput(initOutput, finalOutput);
     }
     calcState.updateOutput(initOutput, finalOutput);
-    if (_isOperator(buttonText) || buttonText == '%') {
-      _num1 = num.parse(initOutput);
-    }
-    
-    else {
-      _num1 = num.parse(initOutput);
-      initOutput = '0';
-      finalOutput = '';
-      _operator = '';
-    }
+    _num1 = num.parse(initOutput);
+    initOutput = '0';
+    _operator = '';
+    // if (_isOperator(buttonText) || buttonText == '%') {
+    //   _num1 = num.parse(initOutput);
+    // } else {
+    //   _num1 = num.parse(initOutput);
+    //   initOutput = '0';
+    //   finalOutput = '';
+    //   _operator = '';
+    // }
   } else if (buttonText == '.') {
     if (!initOutput.contains('.')) {
       initOutput += buttonText;
@@ -97,6 +93,9 @@ void buttonPressed(String buttonText, CalcState calcState) {
     calcState.updateOutput(initOutput, finalOutput);
   } else if (initOutput != '0') {
     initOutput += buttonText;
+    while (initOutput.length > maxOutputLength) {
+      initOutput = initOutput.substring(0, maxOutputLength);
+    }
     calcState.updateOutput(initOutput, finalOutput);
   } else {
     throw Exception(e);
@@ -139,6 +138,15 @@ String _performCalculation() {
 
 void _addHistory() {
   history.add("$expression \n $answer");
+
+  if (history.length > maxHistoryEntries) {
+    history.removeAt(0);
+  }
+}
+
+void clearHistory() {
+  history.clear();
+  
 }
 
 void convert() {}

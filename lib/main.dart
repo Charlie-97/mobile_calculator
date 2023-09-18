@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_calculator/utils/calc_state.dart';
 import 'package:provider/provider.dart';
-import 'pages/converter.dart';
-import 'pages/history.dart';
-import 'pages/scientific.dart';
-import 'pages/standard.dart';
+import 'package:mobile_calculator/pages/converter.dart';
+import 'package:mobile_calculator/pages/history.dart';
+import 'package:mobile_calculator/pages/scientific.dart';
+import 'package:mobile_calculator/pages/standard.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -24,8 +24,7 @@ class _CalcHomeState extends State<CalcHome> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: CalcScreen(),
-      theme: ThemeData(
+        theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
       ),
       routes: {
